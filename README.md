@@ -1,4 +1,4 @@
-# teeth-recognition
+# Teeth Recognition
 Repository to collect the code used to implement an image feature comparison.
 
 ## Introduction
