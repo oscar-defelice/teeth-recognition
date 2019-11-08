@@ -2,15 +2,13 @@
 *.lvlibp
 *.llb
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# Editor files
+*.xcodeproj
 
-# Executables
-*.exe
+# LaTeX and pages files
+*.tex
+*.pages
 
 # Metadata
-*.aliases
-*.lvlps
+*.bbl
+*.dvi
