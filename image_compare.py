@@ -30,3 +30,60 @@ import matplotlib.pyplot as plt
 
 
 LOWE_THRS = 0.7
+
+class Image:
+    """
+        Class for image loading and processing.
+        
+        Parameters
+        ----------
+        color:  boolean, optional, default False
+                It specifies to load a color image.
+                Any transparency of image will be neglected.
+                It is the default flag.
+                Alternatively, we can pass integer value 1 for this flag.
+        
+        grayscale:  boolean, optional, default True
+                    It specifies to load an image in grayscale mode.
+                    Alternatively, we can pass integer value 0 for this flag.
+            
+        unchanged:  boolean, optional, default False
+                    It specifies to load an image as such including alpha channel.
+                    Alternatively, we can pass integer value -1 for this flag.
+        
+        Attributes
+        ----------
+        size_ : tuple (n_pixels_row, n_pixels_columns)
+                Image dimension in pixels.
+                
+        
+        Notes
+        -----
+        From the implementation point of view, this is just a collection of methods to import and preprocess an image, by using several openCV method.
+        
+        TODO: include menpo project methods.
+    """
+
+
+class ImageCompare:
+    """
+        Class for image comparison.
+        
+        Parameters
+        ----------
+        
+        
+        Attributes
+        ----------
+        threshold_ :    float, optional, default=0.7
+                        This is the threshold value to consider whether a match is good or to be rejected.
+                        The default value corresponds to the 1999 Lowe paper.
+                        
+        
+        Examples
+        --------
+        
+        Notes
+        -----
+        
+    """
