@@ -17,4 +17,6 @@ The main goal is to apply such algorithm, firstly implemented to compare generic
 
 ## A not-so-easy task: Compare two radiographs
 
+## Metric: a score to quantify how similar are two images
+
 ## Conclusions and further developments
