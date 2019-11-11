@@ -5,9 +5,6 @@
 # Editor files
 *.xcodeproj
 
-# OS files
-*.DS_store
-
 # LaTeX and pages files
 *.tex
 *.pages
