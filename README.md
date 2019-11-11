@@ -12,7 +12,7 @@ A motivational example might be the following: imagine the case of a [mass disas
 In such an event it is crucial the precise and rapid identification of victims.
 An image comparison system might help the forensic odontologist to compare hundreds of radiographs and find the one with highest similarity score with the given one.
 
-![]('../../Images/mass-disaster.jpg')
+![title](http://www.weareforensic.co.uk/wp-content/uploads/2014/07/WTC_911-620x300.jpg)
 
 ### Shape recognition in images
 
