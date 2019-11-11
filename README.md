@@ -9,10 +9,11 @@ The main goal is to apply such algorithm, firstly implemented to compare generic
 The main idea is to create a library collecting methods from `openCV`, to make comparison between images to identify subjects up to a certain level of confidence.
 
 A motivational example might be the following: imagine the case of a [mass disaster](https://www.sciencedirect.com/topics/social-sciences/mass-disaster). 
-In such an event it is crucial the precise and rapid identification of victims.
+In such an event it is crucial the precise and rapid identification of victims, a [process](http://www.weareforensic.co.uk/mass-disasters-disaster-victim-identification/) that can be quite complicate.
 An image comparison system might help the forensic odontologist to compare hundreds of radiographs and find the one with highest similarity score with the given one.
 
 ![title](http://www.weareforensic.co.uk/wp-content/uploads/2014/07/WTC_911-620x300.jpg)
+*An image from one of the most famous mass disaster in hystory: $11^\mathrm{th}$ September 2001.*
 
 ### Shape recognition in images
 
