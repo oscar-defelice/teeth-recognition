@@ -29,6 +29,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 
+### constants definition ###
 LOWE_THRS = 0.7
 
 class Image:
@@ -37,17 +38,17 @@ class Image:
         
         Parameters
         ----------
-        color:  boolean, optional, default False
+        color:  boolean, optional, default=False
                 It specifies to load a color image.
                 Any transparency of image will be neglected.
                 It is the default flag.
                 Alternatively, we can pass integer value 1 for this flag.
         
-        grayscale:  boolean, optional, default True
+        grayscale:  boolean, optional, default=True
                     It specifies to load an image in grayscale mode.
                     Alternatively, we can pass integer value 0 for this flag.
             
-        unchanged:  boolean, optional, default False
+        unchanged:  boolean, optional, default=False
                     It specifies to load an image as such including alpha channel.
                     Alternatively, we can pass integer value -1 for this flag.
         
