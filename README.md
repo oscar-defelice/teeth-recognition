@@ -202,6 +202,24 @@ Roughly speaking and being schematic, if the eigenvalues of $\mathcal{H}$ are bo
 
 #### Orientation assignement
 
+Getting the keypoints is only half the battle. Now we have to obtain the actual descriptors. But before we do so, we need to ensure another type of invariance: rotational.
+
+We have ensured _translational invariance_ thanks to the convolution of our filters over the image. 
+We also have _scale invariance_ because of our use of the scale-normalized LoG filter. 
+Now, to impose _rotational invariance_, we assign the patch around each keypoint an orientation corresponding to its __dominant gradient direction__. 
+
+To assign orientation, we take a patch around each keypoint thats size is proportional to the scale of that keypoint. 
+
+Consider the image below.
+
+![title](https://s3-ap-south-1.amazonaws.com/av-blog-media/wp-content/uploads/2019/09/Screenshot-from-2019-09-25-19-22-24.png)
+
+One can calculate the following quantities,
+
+$$ \begin{alignement} r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2} \\
+\phi = \atan{\left(\partial_x f\right)/\left(\partial_y f\right)} \end{alignement} $$
+
+> The magnitude represents the intensity of the pixel and the orientation gives the direction for the same.
 
 
 ### The optimised version: Speeded Up Robust Feature
