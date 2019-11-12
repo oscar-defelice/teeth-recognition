@@ -123,9 +123,9 @@ One can easily implement all of this by some python code. This is not the goal o
 
 Here we collect the main points of the part one of the algorithm, that is the construction of scale-space or _Gaussian pyramid_.
 
-*. Given the original image, apply the blur filter to add a double the blur $s$ times.
-*. Half the scale of the image to create different octaves.
-*. Apply the DoG to get the desired number of octaves.
+* Given the original image, apply the blur filter to add a double the blur $s$ times.
+* Half the scale of the image to create different octaves.
+* Apply the DoG to get the desired number of octaves.
 
 ### The optimised version: Speeded Up Robust Feature
 
