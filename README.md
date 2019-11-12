@@ -216,9 +216,48 @@ Consider the image below.
 
 One can calculate the following quantities,
 
-$$ r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2}\, , \quad \phi = \mathrm{atan}{\left(\partial_x f\right)/\left(\partial_y f\right)} $$
+$$ r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2} , \quad \phi = \mathrm{atan}{\left(\partial_x f\right)/\left(\partial_y f\right)} $$
+
+called respectively _magnitude_ and _orientation_. 
+They are functions of the gradient in each point.
+To summarise, we can state 
 
 > The magnitude represents the intensity of the pixel and the orientation gives the direction for the same.
+
+We can now create a histogram given that we have calculated these magnitude and orientation values for the whole pixel space.
+
+The histogram is created on orientation value (the gradient is specified in polar coordinates) and has 36 bins (each bin has a width of 10 degrees). When the magnitude and angle of the gradient at a pixel is calculated, the corresponding bin in our histogram grows by the gradient magnitude weighted by the Gaussian window.
+Once we have our histogram, we assign that keypoint the orientation of the maximal histogram bin.
+
+To rephrase, let's look at the histogram below.
+
+![title](https://s3-ap-south-1.amazonaws.com/av-blog-media/wp-content/uploads/2019/09/Screenshot-from-2019-09-26-18-53-12.png)
+
+This histogram would peak at some point. The bin at which we see the peak will be the orientation for the keypoint. 
+Additionally, if there is another significant peak (seen between 80 – 100%), then another keypoint is generated with the magnitude and scale the same as the keypoint used to generate the histogram. 
+And the angle or orientation will be equal to the new bin that has the peak.
+
+Effectively at this point, we can say that there can be a small increase in the number of keypoints.
+
+#### Local descriptors
+
+Finally we got at the final step of SIFT.
+The previous step gave us a set of stable keypoints, which are also scale-invariant and rotation-invariant.
+Now, we can create the local descriptors for each keypoint. 
+We will make use of points in the neighbourhood of each keypoints to characterise it completely.
+The keypoint endowed with these local properties is called a _descriptor_.
+
+A side effect of this procedure is that, since we use the surrounding pixels, the descriptors will be partially invariant to illumination or brightness of the images.
+
+We will first take a $16 \times 16$ neighbourhood around the keypoint. 
+This $16 \times 16$ block is further divided into $4 \times 4$ sub-blocks and for each of these sub-blocks, we generate an $8$-bin histogram using magnitude and orientation as described above.
+Finally, all of these histograms are concatenated into a $4\times 4 \times 8 =128$ element long feature vector.
+
+This final feature vector is then normalized, thresholded, and renormalized to try and ensure invariance to minor lighting changes.
+
+![title](https://s3-ap-south-1.amazonaws.com/av-blog-media/wp-content/uploads/2019/09/Screenshot-from-2019-09-26-20-10-52.png)
+*Each of these arrows represents the 8 bins and the length of the arrows define the magnitude. So, we will have a total of 128 bin values for every keypoint.*
+
 
 
 ### The optimised version: Speeded Up Robust Feature
