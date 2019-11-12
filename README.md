@@ -258,6 +258,10 @@ This final feature vector is then normalized, thresholded, and renormalized to t
 ![title](https://s3-ap-south-1.amazonaws.com/av-blog-media/wp-content/uploads/2019/09/Screenshot-from-2019-09-26-20-10-52.png)
 *Each of these arrows represents the 8 bins and the length of the arrows define the magnitude. So, we will have a total of 128 bin values for every keypoint.*
 
+To finally summarise,
+
+> A local descriptor is a set of features, encoded by a feature vector, describing magnitude and orientation of neighbourhood for each keypoint. 
+
 
 
 ### The optimised version: Speeded Up Robust Feature
