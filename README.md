@@ -216,8 +216,7 @@ Consider the image below.
 
 One can calculate the following quantities,
 
-$$ \begin{array}{c} r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2} \\\
-\phi = \atan{\left(\partial_x f\right)/\left(\partial_y f\right)} \end{array} $$
+$$ r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2}\, , \quad \phi = \mathrm{atan}{\left(\partial_x f\right)/\left(\partial_y f\right)} $$
 
 > The magnitude represents the intensity of the pixel and the orientation gives the direction for the same.
 
