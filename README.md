@@ -21,6 +21,10 @@ However a model like this might be useful for many other reasons: _e.g._ age est
 
 ### Shape recognition in images
 
+Object recognition is one of the main topics in computer vision. 
+The possibility to program or train a machine to recognise an object amongst others in an image is somehow the holy graal of this reseach area. Indeed, the literature in the field is particularly rich and abundant.
+
+
 
 ## Scale-Invariant Feature Transform
 
@@ -28,7 +32,9 @@ The aim of this section is to answer the question
 
 > what is SIFT? 
 
-Well, SIFT -- which stands for _Scale Invariant Feature Transform_ -- is a method for extracting feature vectors that describe local patches of an image. Not only are these feature vectors scale-invariant, but they are also invariant to translation, rotation, and illumination. In other words: everything a descriptor should be!
+Well, SIFT -- which stands for _Scale Invariant Feature Transform_ -- is a method for extracting feature vectors that describe local patches of an image. 
+
+These feature vectors do not only enjoy the nice property of being scale-invariant, but they are also invariant to translation, rotation, and illumination. In other words: everything a descriptor should be!
 
 These descriptors are useful for matching objects are patches between images. For example, consider creating a panorama. Assuming each image has some overlapping parts, you need some way to align them so we can stitch them together. If we have some points in each image that we know correspond, we can warp one of the images using a homography. SIFT helps with automatically finding not only corresponding points in each image, but points that are easy to match.
 ![title](https://miro.medium.com/max/2448/1*pwOhfFcv28p90fgwWhBzzw.png)
@@ -216,7 +222,7 @@ Consider the image below.
 
 One can calculate the following quantities,
 
-$$ r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2} , \quad \phi = \mathrm{atan}{\left(\partial_x f\right)/\left(\partial_y f\right)} $$
+$$ r = \sqrt{\left(\partial_x f\right)^2 + \left(\partial_y f\right)^2} , \quad \phi = \mathrm{atan}{\left(\partial_x f / \partial_y f\right)} $$
 
 called respectively _magnitude_ and _orientation_. 
 They are functions of the gradient in each point.
@@ -280,5 +286,5 @@ To finally summarise,
 
 I would like to acknowledge both [`openCV`](https://opencv.org/) and [`menpo`](https://www.menpo.org/) projects.
 
-The descriptive sections refers to different sources like [Wikipedia](https://en.wikipedia.org/wiki/Scale-invariant_feature_transform), [Scholarpedia](http://www.scholarpedia.org/article/Scale_Invariant_Feature_Transform), [medium articles](https://medium.com/@lerner98/implementing-sift-in-python-36c619df7945) and the [original](https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf) [papers](http://www.vision.ee.ethz.ch/~surf/papers.html) and one may find deeper details there.  
+The descriptive sections refers to different sources like [Wikipedia](https://en.wikipedia.org/wiki/Scale-invariant_feature_transform), [Scholarpedia](http://www.scholarpedia.org/article/Scale_Invariant_Feature_Transform), [medium articles](https://medium.com/@lerner98/implementing-sift-in-python-36c619df7945) and the [original](https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf) [papers](http://www.vision.ee.ethz.ch/~surf/papers.html) and one may find further details there.  
 SIFT algorithm was patented in Canada by the [University of British Columbia](https://patents.google.com/patent/US6711293) and published by [David Lowe in 1999](https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf).
