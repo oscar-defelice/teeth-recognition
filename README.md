@@ -168,12 +168,12 @@ The recipe to cook good keypoints goes through three steps:
 In many images, the resolution is not fine enough to find stable keypoints, _i.e._ in the same location in multiple images under multiple conditions. Therefore, one can perform a second-order Taylor expansion of the DoG octave to further localize each keypoint. 
 Explicitly,
 
-$$ \mathcal{D} = \mathcal{D} + \partial_x \mathcal{D}^T + \frac{1}{2} x^T \partial^2_{x^2} \mathcal{D} x \, .$$ 
+$$ \mathcal{D} = \mathcal{D} + \partial_x \mathcal{D}^T + \frac{1}{2} x^T \left(\partial^2_{x^2} \mathcal{D}\right) x \, .$$ 
 
 Here, $x$ is the three-dimensional vector $[x, y, \sigma]$ corresponding to the pixel location of the candidate keypoint. 
 Taking the derivative of this equation with respect to $x$ and setting it equal to zero yields the subpixel _offset_ for the keypoint,
 
-$$ \bar{x} = - \left(partial^2_{x^2} \mathcal{D}\right)^{-1} \partial_x \mathcal{D} \, . $$
+$$ \bar{x} = - \left(\partial^2_{x^2} \mathcal{D}\right)^{-1} \partial_x \mathcal{D} \, . $$
 
 This offset is added to the original keypoint location to achieve subpixel accuracy.
 
@@ -195,10 +195,7 @@ This process is very similar to finding corners using a [Harris corner detector]
 
 The Hessian has the following form,
 
-$$ \mathcal{H} = \begin{pmatrix}
-\mathcal{D}_{xx}    &   \mathcal{D}_{xy} \\
-\mathcal{D}_{yx}    &   \mathcal{D}_{yy} 
-\end{pmatrix}\, . $$
+$$ \mathcal{H} = \begin{pmatrix} \mathcal{D}_{xx}    &   \mathcal{D}_{xy} \\ \mathcal{D}_{yx}    &   \mathcal{D}_{yy} \end{pmatrix}\, . $$
 
 To detect whether a point is on the edge, we need to _diagonalise_, that is find eigenvalues and eigenvectors of such Hessian matrix.
 Roughly speaking and being schematic, if the eigenvalues of $\mathcal{H}$ are both large (with respect to some scale), the probability the point is on the edge is high. We refer again to the [original paper](http://new.csd.uwo.ca/Courses/CS9840a/PossibleStudentPapers/iccv99.pdf).
