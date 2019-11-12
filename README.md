@@ -125,7 +125,7 @@ Here we collect the main points of the part one of the algorithm, that is the co
 
 * Given the original image, apply the blur filter to add a double the blur $s$ times.
 * Half the scale of the image to create different octaves.
-* Apply the DoG to get the desired number of octaves.
+* Apply the DoG to get the feature enhanced version of the octave   .
 
 ### The optimised version: Speeded Up Robust Feature
 
