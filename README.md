@@ -119,13 +119,93 @@ The DoG result is the following
 
 One can easily implement all of this by some python code. This is not the goal of this repository, so we refer to an excellent [medium article](https://medium.com/@lerner98/implementing-sift-in-python-36c619df7945) for details.
 
-#### Summary scheme
+**Summary scheme**
 
 Here we collect the main points of the part one of the algorithm, that is the construction of scale-space or _Gaussian pyramid_.
 
 * Given the original image, apply the blur filter to add a double the blur $s$ times.
 * Half the scale of the image to create different octaves.
-* Apply the DoG to get the feature enhanced version of the octave   .
+* Apply the DoG to get the feature enhanced version of the octave.
+
+#### Keypoint localisation
+
+Once the scale space has been defined, we are ready to localise the keypoints to be used for feature matching.
+The idea is to identify extremal points (maxima and minima) for the feature enhanced images.
+
+To be concrete, we split this in two steps:
+
+1. Find the extrema
+2. Remove low contrast keypoints (also known under the name of _keypoint selection_)
+
+**Extremal point scanning**
+
+We will not dig into details of extremisation algorithms to find maxima and minima. 
+Conceptually, we explore the image space (_i.e._ pixel by pixel) and compare each point value with its neighbouring pixels.
+
+![title](https://miro.medium.com/max/936/1*kwBQSL5U-QGSLd-ovlAHFw.png)
+
+In other words, we scan over each scale-space DoG octave, $\mathcal{D}$, and include the center of each $3 \times 3 \times 3$ neighbourhood as a keypoint if it is the minimum or maximum value in neighbourhood.
+
+This is the reason the algorithm has generated $s+2$ levels in the DoG octave.
+One cannot scan over the points in the top or bottom level, but one still wants to get keypoints over a full octave of blur.
+
+Keypoints so selected are scale-invariant, however, they yield many poor choices and/or noisy, so in the next section we will throw out bad ones as well refine good ones.
+
+**Keypoint selection**
+
+The guide principle leading us to keypoint selection is 
+
+> Let's eliminate the keypoints that have low contrast, or lie very close to the edge.
+
+This because low-contrast points are not robust to noise, while keypoints on edges should be discarded because their orientation is ambiguous, thus they will spoil rotational invariance of feature descriptors.
+
+The recipe to cook good keypoints goes through three steps:
+
+1. Compute the subpixel location of each keypoint
+2. Throw out that keypoint if it is scale-space value at the subpixel is below a threshold.
+3. Eliminate keypoints on edges using the Hessian around each subpixel keypoint.
+
+In many images, the resolution is not fine enough to find stable keypoints, _i.e._ in the same location in multiple images under multiple conditions. Therefore, one can perform a second-order Taylor expansion of the DoG octave to further localize each keypoint. 
+Explicitly,
+
+$$ \mathcal{D} = \mathcal{D} + \partial_x \mathcal{D}^T + \frac{1}{2} x^T \partial^2_{x^2} \mathcal{D} x \, .$$ 
+
+Here, $x$ is the three-dimensional vector $[x, y, \sigma]$ corresponding to the pixel location of the candidate keypoint. 
+Taking the derivative of this equation with respect to $x$ and setting it equal to zero yields the subpixel _offset_ for the keypoint,
+
+$$ \bar{x} = - \left(partial^2_{x^2} \mathcal{D}\right)^{-1} \partial_x \mathcal{D} \, . $$
+
+This offset is added to the original keypoint location to achieve subpixel accuracy.
+
+At this stage, we have to deal with the low contrast keypoints.
+To evaluate if a given keypoint has low contrast, we perform again a Taylor expansion.
+
+Remind we do not just have keypoints, but subpixel offsets.
+The subpixel keypoint contrast can be calculated as,
+
+$$ \mathcal{D}(\bar{x}) = \mathcal{D} + \frac{1}{2}\partial_x\mathcal{D}^T \bar{x}\, ,$$
+
+which is the subpixel offset added to the pixel-level location. 
+If the absolute value is below a fixed threshold, we reject the point. 
+We do this because we want to be sure that extrema are effectively extreme.
+
+Finally, as said we want to eliminate the contribution of the edge keypoints, because they will break rotational invariance of the descriptors.
+To do this, we use the Hessian calculated when computing the subpixel offset. 
+This process is very similar to finding corners using a [Harris corner detector](https://en.wikipedia.org/wiki/Harris_Corner_Detector).
+
+The Hessian has the following form,
+
+$$ \mathcal{H} = \begin{pmatrix}
+\mathcal{D}_{xx}    &   \mathcal{D}_{xy} \\
+\mathcal{D}_{yx}    &   \mathcal{D}_{yy} 
+\end{pmatrix}\, . $$
+
+To detect whether a point is on the edge, we need to _diagonalise_, that is find eigenvalues and eigenvectors of such Hessian matrix.
+Roughly speaking and being schematic, if the eigenvalues of $\mathcal{H}$ are both large (with respect to some scale), the probability the point is on the edge is high. We refer again to the [original paper](http://new.csd.uwo.ca/Courses/CS9840a/PossibleStudentPapers/iccv99.pdf).
+
+#### Orientation assignement
+
+
 
 ### The optimised version: Speeded Up Robust Feature
 
