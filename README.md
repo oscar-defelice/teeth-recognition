@@ -117,6 +117,15 @@ The DoG result is the following
 
 ![title](https://s3-ap-south-1.amazonaws.com/av-blog-media/wp-content/uploads/2019/09/Screenshot-from-2019-09-25-14-18-26.png)
 
+One can easily implement all of this by some python code. This is not the goal of this repository, so we refer to an excellent [medium article](https://medium.com/@lerner98/implementing-sift-in-python-36c619df7945) for details.
+
+#### Summary scheme
+
+Here we collect the main points of the part one of the algorithm, that is the construction of scale-space or _Gaussian pyramid_.
+
+*. Given the original image, apply the blur filter to add a double the blur $s$ times.
+*. Half the scale of the image to create different octaves.
+*. Apply the DoG to get the desired number of octaves.
 
 ### The optimised version: Speeded Up Robust Feature
 
