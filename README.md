@@ -195,7 +195,7 @@ This process is very similar to finding corners using a [Harris corner detector]
 
 The Hessian has the following form,
 
-$$ \mathcal{H} = \begin{pmatrix} \mathcal{D}_{xx} & b \\\ c & d \end{pmatrix} . $$
+$$ \mathcal{H} = \begin{pmatrix} \mathcal{D}_{xx} & \mathcal{D}_{xy} \\\ \mathcal{D}_{yx}& \mathcal{D}_{yy} \end{pmatrix} . $$
 
 To detect whether a point is on the edge, we need to _diagonalise_, that is find eigenvalues and eigenvectors of such Hessian matrix.
 Roughly speaking and being schematic, if the eigenvalues of $\mathcal{H}$ are both large (with respect to some scale), the probability the point is on the edge is high. We refer again to the [original paper](http://new.csd.uwo.ca/Courses/CS9840a/PossibleStudentPapers/iccv99.pdf).
