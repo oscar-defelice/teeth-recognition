@@ -38,13 +38,13 @@ class Image:
         
         Parameters
         ----------
-        color:  boolean, optional, default=False
+        color:  boolean, optional, default=True
                 It specifies to load a color image.
                 Any transparency of image will be neglected.
                 It is the default flag.
                 Alternatively, we can pass integer value 1 for this flag.
         
-        grayscale:  boolean, optional, default=True
+        grayscale:  boolean, optional, default=False
                     It specifies to load an image in grayscale mode.
                     Alternatively, we can pass integer value 0 for this flag.
             
@@ -54,8 +54,14 @@ class Image:
         
         Attributes
         ----------
-        size_ : tuple (n_pixels_row, n_pixels_columns)
+        size_ : tuple (n_pixels_row, n_pixels_columns, n_channels)
                 Image dimension in pixels.
+        
+        path_ : str
+                Path location of the file.
+
+        img_  : obj
+                Image object.
                 
         
         Notes
@@ -65,6 +71,17 @@ class Image:
         TODO: include menpo project methods.
     """
 
+    def __init__(self, path_to_file, flag = 1):
+    """
+        Constructor method for the image.
+        One parameter is the path to the image file.
+        The second (optional) parameter is the image read mode from openCV.
+        Another attribute comes from the imread() method from openCV.  
+    """
+    self.path_ = path_to_file
+    self.img_ = cv2.imread(self.path_, flag)
+    self.size_ = self.img_.shape
+    
 
 class ImageComparison:
     """
