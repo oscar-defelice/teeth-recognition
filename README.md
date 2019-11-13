@@ -15,7 +15,7 @@ In such an event it is crucial the precise and rapid identification of victims, 
 An image comparison system might help the forensic odontologist to compare hundreds of radiographs and find the one with highest similarity score with the given one.
 
 ![title](http://www.weareforensic.co.uk/wp-content/uploads/2014/07/WTC_911-620x300.jpg)
-*An image from one of the most famous mass disaster in hystory: $11^\mathrm{th}$ September 2001.*
+*An image from one of the most famous mass disasters in hystory: $11^\mathrm{th}$ September 2001.*
 
 However a model like this might be useful for many other reasons: _e.g._ age estimation from dental radiographs, it might help dentists to study the evolution of a disease, etc.
 
