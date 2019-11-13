@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 
 ### constants definition ###
 LOWE_THRS = 0.7
+DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
 
 class Image:
     """
@@ -72,18 +73,51 @@ class Image:
     """
 
     def __init__(self, path_to_file, flag = 1):
-    """
-        Constructor method for the image.
-        One parameter is the path to the image file.
-        The second (optional) parameter is the image read mode from openCV.
-        Another attribute comes from the imread() method from openCV.  
-    """
-    self.path_ = path_to_file
-    self.img_ = cv2.imread(self.path_, flag)
-    self.size_ = self.img_.shape
+        """
+            Constructor method for the image.
+            One parameter is the path to the image file.
+            The second (optional) parameter is the image read mode from openCV.
+            Another attribute comes from the imread() method from openCV.
+        """
+        self.path_ = path_to_file
+        self.img_ = cv2.imread(self.path_, flag)
+        self.size_ = self.img_.shape
+        
+    def __toGray(self):
+        """
+            private method for the class.
+            It makes use of the cvtColor method of openCV to convert the color image to a gray scale.
+        """
+        return cv2.cvtColor(self.img_, cv2.COLOR_BGR2GRAY)
     
-
-class ImageComparison:
+    
+    def keypoints(self, model):
+        """
+            Method to calculate keypoints and descriptors.
+            The argument model is an object indicating which algorithm to use.
+            
+            returns a tuple of lists.
+            
+            keypoints is a list of keypoint objects.
+            descriptors is a list of arrays encoding the features vector.
+        """
+        keypoints, descriptors = model.detectAndCompute(self.img_, None)
+        return keypoints, descriptors
+    
+    def plotKeypoints(self, figsize = DEFAULT_FIGSIZE):
+        """
+            Method to plot the image with keypoints.
+            
+            figsize is a tuple tuning the plot size.
+        """
+        
+        img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints(model)[0], self.img_)
+        plt.figure(figsize=DEFAULT_FIGSIZE)
+        plt.imshow(img_to_plot);
+    
+    
+    
+class ImageComparator:
     """
         Class for image comparison.
         
