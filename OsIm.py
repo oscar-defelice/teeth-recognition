@@ -99,7 +99,7 @@ class Image:
         """
         return cv2.cvtColor(self.img_, cv2.COLOR_BGR2GRAY)
     
-    def __model_selection(model_name):
+    def __model_selection(self, model_name):
         """
             Private method to define which feature detecting algorithm to use.
             
