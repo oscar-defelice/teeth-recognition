@@ -38,6 +38,10 @@ import matplotlib.pyplot as plt
 LOWE_THRS = 0.7
 DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
 
+### models definitions ###
+sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = 20)
+surf = cv2.xfeatures2d.SURF_create(extended = True)
+
 class Image:
     """
         Class for image loading and processing.
@@ -95,30 +99,47 @@ class Image:
         """
         return cv2.cvtColor(self.img_, cv2.COLOR_BGR2GRAY)
     
-    
-    def keypoints(self, model):
+    def __model_selection(model_name):
+        """
+            Private method to define which feature detecting algorithm to use.
+            
+            model_name is a string the name of the model.
+            It returns the model object.
+        """
+        if model_name == 'sift':
+            model = sift
+        elif model_name == 'surf':
+            model = surf
+        else:
+            raise ValueError('The only implemented models are sift and surf.')
+        
+        return model
+            
+            
+    def keypoints(self, model_name):
         """
             Method to calculate keypoints and descriptors.
             
-            The argument model is an object indicating which algorithm to use.
+            The argument model_name is a string the name of the model.
             
             returns a tuple of lists.
             keypoints is a list of keypoint objects.
             descriptors is a list of arrays encoding the features vector.
         """
+        model = __model_selection(model_name)
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
         return keypoints, descriptors
         
     
-    def plotKeypoints(self, model, figsize = DEFAULT_FIGSIZE):
+    def plotKeypoints(self, model_name, figsize = DEFAULT_FIGSIZE):
         """
             Method to plot the image with keypoints.
             
-            model is an object indicating which algorithm to use.
+            model_name is a string indicating which algorithm to use.
             figsize is a tuple tuning the plot size.
         """
         
-        img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints(model)[0], self.img_)
+        img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints(model_name)[0], self.img_)
         plt.figure(figsize=DEFAULT_FIGSIZE)
         plt.imshow(img_to_plot)
         
