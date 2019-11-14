@@ -119,7 +119,16 @@ class Image:
         
         img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints(model)[0], self.img_)
         plt.figure(figsize=DEFAULT_FIGSIZE)
-        plt.imshow(img_to_plot);
+        plt.imshow(img_to_plot)
+        
+    def plotImage(self, figsize = DEFAULT_FIGSIZE):
+        """
+            Method to plot the image.
+            
+            figsize is a tuple tuning the plot size.
+        """
+        plt.figure(figsize=DEFAULT_FIGSIZE)
+        plt.imshow(self.img_), plt.show()
     
     
     
