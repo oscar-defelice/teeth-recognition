@@ -19,6 +19,9 @@
 ###
 ########################################################################
 ###
+### theet-recognition.py
+### This is the script to make image comparison. It makes use of OsIm module.
+###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
 ###

@@ -1,5 +1,5 @@
 ###
-### image_compare.py
+### OsIm.py
 ###
 ### Created by Oscar de Felice on 10/11/2019.
 ### Copyright © 2019 Oscar de Felice.
@@ -19,8 +19,12 @@
 ###
 ########################################################################
 ###
+### OsIm.py
+### This is a module to collect classes definitions useful for the script.
+###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
+### 13/11/2019 - Oscar: image class defined with all its attributes and methods.
 ###
 
 ### import Libraries ###
@@ -94,20 +98,22 @@ class Image:
     def keypoints(self, model):
         """
             Method to calculate keypoints and descriptors.
+            
             The argument model is an object indicating which algorithm to use.
             
             returns a tuple of lists.
-            
             keypoints is a list of keypoint objects.
             descriptors is a list of arrays encoding the features vector.
         """
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
         return keypoints, descriptors
+        
     
-    def plotKeypoints(self, figsize = DEFAULT_FIGSIZE):
+    def plotKeypoints(self, model, figsize = DEFAULT_FIGSIZE):
         """
             Method to plot the image with keypoints.
             
+            model is an object indicating which algorithm to use.
             figsize is a tuple tuning the plot size.
         """
         
