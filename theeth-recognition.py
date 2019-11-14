@@ -24,5 +24,28 @@
 ###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
+### 14/11/2019 - Oscar: Istanciate images - script version 1.1.
 ###
 
+### import Libraries ###
+import OsIm
+import glob # to have a list of images
+
+### images paths
+img_zero_path = 'path/to/image'
+img_test_path = 'path/to/test'
+
+### image objects istances
+img_zero = OsIm.Image(img_zero_path)
+img_test = OsIm.Image(img_test_path)
+
+### plot images to verify
+img_zero.plotImage()
+img_test.plotImage()
+
+### Model selection
+model = 'sift'
+
+### plot keypoints on images
+img_zero.plotKeypoints(model_name = model)
+img_test.plotKeypoints(model_name = model)
