@@ -24,7 +24,8 @@
 ###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
-### 13/11/2019 - Oscar: image class defined with all its attributes and methods.
+### 13/11/2019 - Oscar: image class - defined all basic attributes and methods.
+### 14/11/2019 - Oscar: image class - added the plot methods.
 ###
 
 ### import Libraries ###
