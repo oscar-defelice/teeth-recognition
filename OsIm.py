@@ -126,7 +126,7 @@ class Image:
             keypoints is a list of keypoint objects.
             descriptors is a list of arrays encoding the features vector.
         """
-        model = __model_selection(model_name)
+        model = self.__model_selection(model_name)
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
         return keypoints, descriptors
         
