@@ -160,13 +160,13 @@ class ImageComparator:
         
         Parameters
         ----------
-        
+        threshold :     float, optional, default=0.7
+                        This is the threshold value to consider whether a match is good or to be rejected.
+                        The default value corresponds to the 1999 Lowe paper.
         
         Attributes
         ----------
-        threshold_ :    float, optional, default=0.7
-                        This is the threshold value to consider whether a match is good or to be rejected.
-                        The default value corresponds to the 1999 Lowe paper.
+        
                         
         
         Examples
