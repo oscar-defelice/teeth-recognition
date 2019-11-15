@@ -290,7 +290,6 @@ In order to define such a metric, we can fix some key properties any good metric
 * The metric calculated on the same image has to be equal to one, _i.e._ $\g(\gamma, \gamma) =1$, $\forall \gamma$
 
 
-
 ## Conclusions and further developments
 
 ### Acknowledgements
