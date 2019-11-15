@@ -26,6 +26,7 @@
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
 ### 13/11/2019 - Oscar: image class - defined all basic attributes and methods.
 ### 14/11/2019 - Oscar: image class - added the plot methods.
+### 15/11/2019 - Oscar: image comparator class - defined all basic attributes and methods.
 ###
 
 ### import Libraries ###
@@ -45,7 +46,7 @@ surf = cv2.xfeatures2d.SURF_create(extended = True)
 class Image:
     """
         Class for image loading and processing.
-        
+
         Parameters
         ----------
         color:  boolean, optional, default=True
@@ -53,31 +54,31 @@ class Image:
                 Any transparency of image will be neglected.
                 It is the default flag.
                 Alternatively, we can pass integer value 1 for this flag.
-        
+
         grayscale:  boolean, optional, default=False
                     It specifies to load an image in grayscale mode.
                     Alternatively, we can pass integer value 0 for this flag.
-            
+
         unchanged:  boolean, optional, default=False
                     It specifies to load an image as such including alpha channel.
                     Alternatively, we can pass integer value -1 for this flag.
-        
+
         Attributes
         ----------
         size_ : tuple (n_pixels_row, n_pixels_columns, n_channels)
                 Image dimension in pixels.
-        
+
         path_ : str
                 Path location of the file.
 
         img_  : obj
                 Image object.
-                
-        
+
+
         Notes
         -----
         From the implementation point of view, this is just a collection of methods to import and preprocess an image, by using several openCV method.
-        
+
         TODO: include menpo project methods.
     """
 
@@ -91,18 +92,18 @@ class Image:
         self.path_ = path_to_file
         self.img_ = cv2.imread(self.path_, flag)
         self.size_ = self.img_.shape
-        
+
     def __toGray(self):
         """
             private method for the class.
             It makes use of the cvtColor method of openCV to convert the color image to a gray scale.
         """
         return cv2.cvtColor(self.img_, cv2.COLOR_BGR2GRAY)
-    
+
     def __model_selection(self, model_name):
         """
             Private method to define which feature detecting algorithm to use.
-            
+
             model_name is a string the name of the model.
             It returns the model object.
         """
@@ -112,16 +113,16 @@ class Image:
             model = surf
         else:
             raise ValueError('The only implemented models are sift and surf.')
-        
+
         return model
-            
-            
+
+
     def keypoints(self, model_name):
         """
             Method to calculate keypoints and descriptors.
-            
+
             The argument model_name is a string the name of the model.
-            
+
             returns a tuple of lists.
             keypoints is a list of keypoint objects.
             descriptors is a list of arrays encoding the features vector.
@@ -129,50 +130,58 @@ class Image:
         model = self.__model_selection(model_name)
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
         return keypoints, descriptors
-        
-    
+
+
     def plotKeypoints(self, model_name, figsize = DEFAULT_FIGSIZE):
         """
             Method to plot the image with keypoints.
-            
+
             model_name is a string indicating which algorithm to use.
             figsize is a tuple tuning the plot size.
         """
-        
+
         img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints(model_name)[0], self.img_)
         plt.figure(figsize=DEFAULT_FIGSIZE)
         plt.imshow(img_to_plot)
-        
+
     def plotImage(self, figsize = DEFAULT_FIGSIZE):
         """
             Method to plot the image.
-            
+
             figsize is a tuple tuning the plot size.
         """
         plt.figure(figsize=DEFAULT_FIGSIZE)
         plt.imshow(self.img_), plt.show()
-    
-    
-    
+
+
+
 class ImageComparator:
     """
         Class for image comparison.
-        
+
         Parameters
         ----------
         threshold :     float, optional, default=0.7
                         This is the threshold value to consider whether a match is good or to be rejected.
                         The default value corresponds to the 1999 Lowe paper.
-        
+
         Attributes
         ----------
-        
-                        
-        
+        model_  :   object,
+                    which model has been used to calculate keypoints.
+
+
         Examples
         --------
-        
+
         Notes
         -----
-        
+
     """
+
+    def __init__(self, match_model):
+        """
+            Constructor method for comparator.
+            It takes one argument, the match_model indicating the kind of match we want
+        """
+        self.match_ = match_model
