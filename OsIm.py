@@ -38,6 +38,9 @@ import matplotlib.pyplot as plt
 ### constants definition ###
 LOWE_THRS = 0.7
 DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
+FLANN_INDEX_KDTREE = 1
+N_FLANN_TREES = 5
+N_FLANN_CHECKS = 50
 
 ### models definitions ###
 sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = 20)
@@ -77,7 +80,8 @@ class Image:
 
         Notes
         -----
-        From the implementation point of view, this is just a collection of methods to import and preprocess an image, by using several openCV method.
+        From the implementation point of view, this is just a collection of methods to import and preprocess an image,
+        by using several openCV method.
 
         TODO: include menpo project methods.
     """
@@ -161,13 +165,19 @@ class ImageComparator:
 
         Parameters
         ----------
-        threshold :     float, optional, default=0.7
+        matcher :   str, optional, default = 'bf'
+                    This is the string controlling the feature matching method.
+                    Default is Brute Force.
+                    Admitted values:
+                        'bf', 'flann'
+
+        threshold :     float, optional, default = 0.7
                         This is the threshold value to consider whether a match is good or to be rejected.
                         The default value corresponds to the 1999 Lowe paper.
 
         Attributes
         ----------
-        model_  :   object,
+        matcher :   object,
                     which model has been used to calculate keypoints.
 
 
@@ -179,9 +189,30 @@ class ImageComparator:
 
     """
 
-    def __init__(self, match_model):
+    def __init__(self, matcher):
         """
             Constructor method for comparator.
-            It takes one argument, the match_model indicating the kind of match we want
+            It takes one argument, the matcher (a str) indicating the kind of matcher we want
         """
-        self.match_ = match_model
+        if matcher not in ['bf', 'flann']:
+            raise NotImplementedError('Only brute-force and Flann methods are implemented for matching.')
+        else:
+            self.matcher_ = matcher
+            self.match_model_ = __match_selection(matcher)
+
+    @staticmethod
+    def __match_selection(match_model):
+        """
+            Private method to select the matching scheme.
+
+            For the moment being the only two admitted arguments are
+        """
+        if match_model == 'bf': # feature matching method - Brute Force
+            matcher =  cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
+        elif match_model == 'flann': # feature matching method - Flann method
+            index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = N_FLANN_TREES)
+            search_params = dict(checks = N_FLANN_CHECKS)   # or pass empty dictionary
+
+            matcher = cv2.FlannBasedMatcher(index_params,search_params)
+
+        return matcher
