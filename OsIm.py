@@ -41,9 +41,10 @@ DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
 FLANN_INDEX_KDTREE = 1
 N_FLANN_TREES = 5
 N_FLANN_CHECKS = 50
+EDGE_THRS = 20 # SIFT edgeThreshold parameter
 
 ### models definitions ###
-sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = 20)
+sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = EDGE_THRS)
 surf = cv2.xfeatures2d.SURF_create(extended = True)
 
 class Image:
