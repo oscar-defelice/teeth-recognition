@@ -285,9 +285,9 @@ Actually, what we want to measure is the degree of confidence of a match between
 
 In order to define such a metric, we can fix some key properties any good metric must satisfy.
 
-* It has to be positive-defined, _i.e._ $\g(\gamma_1, \gamma_2) \geq 0$, $\forall \gamma_1, \gamma_2$.
+* It has to be positive-defined, _i.e._ $g(\gamma_1, \gamma_2) \geq 0$, $\forall \gamma_1, \gamma_2$.
 
-* The metric calculated on the same image has to be equal to one, _i.e._ $\g(\gamma, \gamma) =1$, $\forall \gamma$
+* The metric calculated on the same image has to be equal to one, _i.e._ $g(\gamma, \gamma) =1$, $\forall \gamma$
 
 
 ## Conclusions and further developments
