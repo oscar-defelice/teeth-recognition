@@ -27,6 +27,7 @@
 ### 13/11/2019 - Oscar: image class - defined all basic attributes and methods.
 ### 14/11/2019 - Oscar: image class - added the plot methods.
 ### 15/11/2019 - Oscar: image comparator class - defined all basic attributes and methods.
+### 17/11/2019 - Oscar: image comparator class - match method added.
 ###
 
 ### import Libraries ###
