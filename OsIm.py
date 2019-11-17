@@ -217,3 +217,12 @@ class ImageComparator:
             matcher = cv2.FlannBasedMatcher(index_params,search_params)
 
         return matcher
+        
+    def match(self, descriptors1, descriptors2):
+        """
+            match method.
+            
+            It takes two arrays of descriptors as input.
+            It returns a list of matches objects.
+        """
+        return self.match_model_.match(descriptors1, descriptors2)
