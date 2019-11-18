@@ -127,7 +127,7 @@ class Image:
         return model
 
 
-    def keypoints(self, model_name == DEFAULT_FEATURE_MODEL):
+    def keypoints(self, model_name = DEFAULT_FEATURE_MODEL):
         """
             Method to calculate keypoints and descriptors.
 
