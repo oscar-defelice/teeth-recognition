@@ -2,6 +2,19 @@
 
 Repository to collect the code used to implement an image feature comparison.
 
+## Installation instructions
+
+To not mess up with versioning and package installation, we strongly advice to create a virtual environment.
+One can follow [this guide](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) and the suitable section according to the OS.
+
+Once the virtual environment has been set up, as usual, one has to run from a command line, the following instruction
+
+```bash
+  pip install -r requirements.txt
+```
+
+This install all the packages the code in this repository needs. 
+
 ## Introduction and motivations
 
 The main goal is to apply such algorithm, firstly implemented to compare generic images features, to recognise teeth characteristics. This would have several important applications of high importance, e.g. the identification of people from the dental features.
