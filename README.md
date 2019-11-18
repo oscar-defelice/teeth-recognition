@@ -281,8 +281,6 @@ To finally summarise,
 
 > A local descriptor is a set of features, encoded by a feature vector, describing magnitude and orientation of neighbourhood for each keypoint.
 
-
-
 ### The optimised version: Speeded Up Robust Feature
 
 ## Getting dirty: examples
