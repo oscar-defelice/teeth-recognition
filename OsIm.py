@@ -39,6 +39,7 @@ import matplotlib.pyplot as plt
 ### constants definition ###
 LOWE_THRS = 0.7
 DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
+DEFAULT_FEATURE_MODEL = 'sift'
 FLANN_INDEX_KDTREE = 1
 N_FLANN_TREES = 5
 N_FLANN_CHECKS = 50
@@ -123,11 +124,12 @@ class Image:
         return model
 
 
-    def keypoints(self, model_name):
+    def keypoints(self, model_name == DEFAULT_FEATURE_MODEL):
         """
             Method to calculate keypoints and descriptors.
 
             The argument model_name is a string the name of the model.
+            Default value is 'sift'.
 
             returns a tuple of lists.
             keypoints is a list of keypoint objects.
@@ -138,7 +140,7 @@ class Image:
         return keypoints, descriptors
 
 
-    def plotKeypoints(self, model_name, figsize = DEFAULT_FIGSIZE):
+    def plotKeypoints(self, model_name = DEFAULT_FEATURE_MODEL, figsize = DEFAULT_FIGSIZE):
         """
             Method to plot the image with keypoints.
 
