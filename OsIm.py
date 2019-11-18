@@ -272,8 +272,8 @@ class ImageComparator:
                 
                 good_matches = [match for match in all_matches if match.distance >= n_matches]
                 return good_matches
-        except:
-            raise ValueError('%s is not an integer or a float' %n_matches)
+            except:
+                raise ValueError('%s is not an integer or a float' %n_matches)
 
     def plot_matching(self, Image_1, Image_2,
                       model_name = DEFAULT_FEATURE_MODEL,
