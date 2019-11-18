@@ -270,7 +270,7 @@ class ImageComparator:
                 if (n_matches > 1 or n_matches < 0):
                     raise ValueError('n_matches can only be an integer or a float between 0 and 1')
                 
-                good_matches = [match in all_matches if match.distance >= n_matches]
+                good_matches = [match for match in all_matches if match.distance >= n_matches]
                 return good_matches
         else:
             raise ValueError('%s is not an integer or a float' %n_matches)
