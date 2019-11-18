@@ -28,6 +28,8 @@
 ### 14/11/2019 - Oscar: image class - added the plot methods.
 ### 15/11/2019 - Oscar: image comparator class - defined all basic attributes and methods.
 ### 17/11/2019 - Oscar: image comparator class - match method added.
+### 18/11/2019 - Oscar: image class - added sift as default feature detection model.
+### 18/11/2019 - Oscar: image comparator class - match method updated with model selection.
 ###
 
 ### import Libraries ###
