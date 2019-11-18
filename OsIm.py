@@ -46,6 +46,7 @@ FLANN_INDEX_KDTREE = 1
 N_FLANN_TREES = 5
 N_FLANN_CHECKS = 50
 EDGE_THRS = 20 # SIFT edgeThreshold parameter
+N_FEATURES_PLOT = 15
 
 ### models definitions ###
 sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = EDGE_THRS)
@@ -219,7 +220,7 @@ class ImageComparator:
             index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = N_FLANN_TREES)
             search_params = dict(checks = N_FLANN_CHECKS)   # or pass empty dictionary
 
-            matcher = cv2.FlannBasedMatcher(index_params,search_params)
+            matcher = cv2.FlannBasedMatcher(index_params, search_params)
 
         return matcher
 
@@ -231,4 +232,36 @@ class ImageComparator:
             The model_name argument indicates the model to use to calculate images keypoints.
             It returns a list of matches objects.
         """
-        return self.match_model_.match(Image_1.keypoints(model_name)[1], Image_2.keypoints(model_name)[1])
+        matches = self.match_model_.match(Image_1.keypoints(model_name)[1],
+                                          Image_2.keypoints(model_name)[1])
+        matches = sorted(matches, key = lambda x:x.distance)
+        return matches
+
+    def score(self, Image_1, Image_2, model_name == DEFAULT_FEATURE_MODEL):
+        """
+            score of the similarity.
+
+            It takes two objects of type Image as input.
+            The model_name argument indicates the model to use to calculate images keypoints.
+            It returns a float indicating the score of the match.
+        """
+
+        return score
+
+    def plot_matching(self, Image_1, Image_2,
+                      model_name = DEFAULT_FEATURE_MODEL,
+                      figsize = DEFAULT_FIGSIZE,
+                      n_features = N_FEATURES_PLOT):
+        """
+            method to plot the images with feature matching.
+
+            The model_name argument indicates the model to use to calculate images keypoints.
+            figsize is a tuple tuning the plot size.
+            n_features is an int indicating how many matches to show.
+        """
+        img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints(model_name)[0],
+                                      Image_2.img_, Image_2.keypoints(model_name)[0],
+                                      self.match[:n], Image_2.img_, flags=2)
+
+        plt.figure(figsize=figsize)
+        plt.imshow(img_to_plot), plt.show()
