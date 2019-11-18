@@ -263,14 +263,15 @@ class ImageComparator:
         """
         all_matches = self.match(Image_1, Image_2, model_name)
 
-        if isinstance(n_matches, int):
+        try:
             return all_matches[:n_matches]
-        elif isinstance(n_matches, float):
-            if (n_matches > 1 or n_matches < 0):
-                raise ValueError('n_matches can only be an integer or a float between 0 and 1')
-
-            good_matches = [match in all_matches if match.distance >= n_matches]
-            return good_matches
+        except ValueError:
+            try:
+                if (n_matches > 1 or n_matches < 0):
+                    raise ValueError('n_matches can only be an integer or a float between 0 and 1')
+                
+                good_matches = [match in all_matches if match.distance >= n_matches]
+                return good_matches
         else:
             raise ValueError('%s is not an integer or a float' %n_matches)
 
