@@ -220,12 +220,13 @@ class ImageComparator:
             matcher = cv2.FlannBasedMatcher(index_params,search_params)
 
         return matcher
-        
-    def match(self, descriptors1, descriptors2):
+
+    def match(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL):
         """
             match method.
-            
-            It takes two arrays of descriptors as input.
+
+            It takes two objects of type Image as input.
+            The model_name argument indicates the model to use to calculate images keypoints.
             It returns a list of matches objects.
         """
-        return self.match_model_.match(descriptors1, descriptors2)
+        return self.match_model_.match(Image_1.keypoints(model_name)[1], Image_2.keypoints(model_name)[1])
