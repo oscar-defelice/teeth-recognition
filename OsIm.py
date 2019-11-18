@@ -46,7 +46,7 @@ FLANN_INDEX_KDTREE = 1
 N_FLANN_TREES = 5
 N_FLANN_CHECKS = 50
 EDGE_THRS = 20 # SIFT edgeThreshold parameter
-N_FEATURES_PLOT = 15
+N_MATCHES_PLOT = 15
 
 ### models definitions ###
 sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = EDGE_THRS)
@@ -237,31 +237,60 @@ class ImageComparator:
         matches = sorted(matches, key = lambda x:x.distance)
         return matches
 
-    def score(self, Image_1, Image_2, model_name == DEFAULT_FEATURE_MODEL):
+    def score(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL):
         """
             score of the similarity.
 
             It takes two objects of type Image as input.
             The model_name argument indicates the model to use to calculate images keypoints.
             It returns a float indicating the score of the match.
+
+            Theoretically, we make use of the Abiyoyo distance to calculate the score.
         """
 
         return score
 
+    def __matches_to_plot(self, Image_1, Image_2,
+                          model_name = DEFAULT_FEATURE_MODEL,
+                          n_matches = N_MATCHES_PLOT):
+        """
+            Private method to choose how many matches to plot.
+
+            It takes two optional arguments.
+            The model_name argument indicates the model to use to calculate images keypoints.
+            An int n_matches will give the number of matches.
+            A float between 0 and 1 will give all the matches whose score is greater than the argument.
+        """
+        all_matches = self.match(Image_1, Image_2, model_name)
+
+        if isinstance(n_matches, int):
+            return all_matches[:n_matches]
+        elif isinstance(n_matches, float):
+            if (n_matches > 1 or n_matches < 0):
+                raise ValueError('n_matches can only be an integer or a float between 0 and 1')
+
+            good_matches = [match in all_matches if match.distance >= n_matches]
+            return good_matches
+        else:
+            raise ValueError('%s is not an integer or a float' %n_matches)
+
     def plot_matching(self, Image_1, Image_2,
                       model_name = DEFAULT_FEATURE_MODEL,
                       figsize = DEFAULT_FIGSIZE,
-                      n_features = N_FEATURES_PLOT):
+                      n_matches = N_MATCHES_PLOT):
         """
             method to plot the images with feature matching.
 
             The model_name argument indicates the model to use to calculate images keypoints.
             figsize is a tuple tuning the plot size.
-            n_features is an int indicating how many matches to show.
+            n_matches can be int and will give the number of matches to show.
+            n_matches can be a float between 0 and 1 and the function will show all the matches
+            whose score is greater than the n_matches.
         """
         img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints(model_name)[0],
                                       Image_2.img_, Image_2.keypoints(model_name)[0],
-                                      self.match[:n], Image_2.img_, flags=2)
+                                      self.__matches_to_plot(Image_1, Image_2, model_name, n_matches),
+                                      Image_2.img_, flags=2)
 
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
