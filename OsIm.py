@@ -32,6 +32,7 @@
 ### 18/11/2019 - Oscar: ImageComparator class - match method updated with model selection.
 ### 19/11/2019 - Oscar: ImageComparator class - match method updated with knn methods.
 ### 19/11/2019 - Oscar: ImageComparator class - added orb algorithm for feature detection.
+### 19/11/2019 - Oscar: ImageComparator class - Lowe score method added.
 ###
 
 ### import Libraries ###
@@ -49,10 +50,12 @@ N_FLANN_TREES = 5
 N_FLANN_CHECKS = 50
 EDGE_THRS = 20 # SIFT edgeThreshold parameter
 N_MATCHES_PLOT = 15
+DEFAULT_N_FEATURES = 15000 # Default number of features for ORB algorithm)
 
 ### models definitions ###
 sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = EDGE_THRS)
 surf = cv2.xfeatures2d.SURF_create(extended = True)
+orb = cv2.ORB_create(nfeatures = DEFAULT_N_FEATURES)
 
 class Image:
     """
@@ -210,7 +213,7 @@ class ImageComparator:
             raise NotImplementedError('Only brute-force and Flann methods are implemented for matching.')
         else:
             self.matcher_ = matcher
-            self.match_model_ = __match_selection(matcher)
+            self.match_model_ = self.__match_selection(matcher)
 
     @staticmethod
     def __match_selection(match_model):
@@ -251,15 +254,19 @@ class ImageComparator:
             k (default 2) argument is an int and indicates the number of classes to collect the matches.
             It returns a list of couples of match objects.
         """
+        # change crossCheck argument of bf matcher for knn method.
+        if self.matcher_ == 'bf':
+            self.match_model_ = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+            
         matches = self.match_model_.knnMatch(Image_1.keypoints(model_name)[1],
                                           Image_2.keypoints(model_name)[1], k=2)
-        matches = sorted(matches, key = lambda x:np.abs(x[0].distance - x[1].distance))
+        matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
         
         return matches
     
     def score(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL):
         """
-            score of the similarity.
+            score of similarity.
 
             It takes two objects of type Image as input.
             The model_name argument indicates the model to use to calculate images keypoints.
@@ -267,7 +274,7 @@ class ImageComparator:
 
             Theoretically, we make use of the Lowe distance to calculate the score.
         """
-
+        
         return score
         
     def __matches_to_plot_classic(self, Image_1, Image_2,
@@ -297,35 +304,25 @@ class ImageComparator:
                 
     def __matches_to_plot_knn(self, Image_1, Image_2,
                               model_name = DEFAULT_FEATURE_MODEL,
-                              n_matches = None):
+                              threshold = LOWE_THRS):
         """
             Private method to choose how many matches to plot.
 
             It makes use of knnmatch method.
             It takes two optional arguments.
             The model_name argument indicates the model to use to calculate images keypoints.
-            An int n_matches will give the number of matches.
-            A float greater than 0 will give all the matches whose score is greater than the argument.
+            threshold argument correspond to the
             
             returns a dictionary of drawing parameters.
         """
         all_matches = self.knnmatch(Image_1, Image_2, model_name, k = 2)
            
-        try:
-            self.__ratio_test(all_matches, threshold)
+        self.__ratio_test(all_matches, threshold)
 
-            draw_params = dict(matchColor = (0,255,0),
-                              singlePointColor = (255,0,0),
-                              matchesMask = matchesMask[:n_matches],
-                              flags = cv2.DrawMatchesFlags_DEFAULT)
-        except:
-            self.__ratio_test(all_matches)
-
-            draw_params = dict(matchColor = (0,255,0),
-                               singlePointColor = (255,0,0),
-                               matchesMask = matchesMask,
-                               flags = cv2.DrawMatchesFlags_DEFAULT)
-            
+        draw_params = dict(matchColor = (0,255,0),
+                           singlePointColor = (255,0,0),
+                           matchesMask = matchesMask,
+                           flags = cv2.DrawMatchesFlags_DEFAULT)
         return draw_params
                 
     def __matches_to_plot(self, Image_1, Image_2, knnmatch = True,
@@ -373,10 +370,25 @@ class ImageComparator:
                                           self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
                                           Image_2.img_, flags=2)
         except:
-            img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints(model_name)[0],
-                                          Image_2.img_, Image_2.keypoints(model_name)[0],
-                                          self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
-                                          Image_2.img_, flags=2)
+            try:
+                img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints(model_name)[0],
+                                              Image_2.img_, Image_2.keypoints(model_name)[0],
+                                              self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
+                                              Image_2.img_, flags=2)
+            except:
+                draw_params = self.__matches_to_plot_knn(Image_1, Image_2,
+                                                         model_name,
+                                                         threshold)
+                try:
+                    img_to_plot = cv2.drawMatchesKnn(Image_1.img_, keypoints_1,
+                                                     Image_2.img_, keypoints_2,
+                                                     self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
+                                                     None, **draw_params)
+                except:
+                    img_to_plot = cv2.drawMatchesKnn(Image_1.img_, Image_1.keypoints(model_name)[0],
+                                                     Image_2.img_, Image_2.keypoints(model_name)[0],
+                                                     self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
+                                                     None, **draw_params)
         
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
