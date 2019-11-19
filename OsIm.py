@@ -265,7 +265,7 @@ class ImageComparator:
             The model_name argument indicates the model to use to calculate images keypoints.
             It returns a float indicating the score of the match.
 
-            Theoretically, we make use of the Abiyoyo distance to calculate the score.
+            Theoretically, we make use of the Lowe distance to calculate the score.
         """
 
         return score
