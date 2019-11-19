@@ -381,7 +381,7 @@ class ImageComparator:
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
     
-    def __ratio_test(self, matches, threshold)
+    def __ratio_test(self, matches, threshold):
         """
             Private method to calculate the ratio test and in Lowe's paper defining SIFT.
             
