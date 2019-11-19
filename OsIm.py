@@ -328,7 +328,7 @@ class ImageComparator:
             
         return draw_params
                 
-    def __matches_to_plot(self, Image_1, Image_2, knnmatch == True,
+    def __matches_to_plot(self, Image_1, Image_2, knnmatch = True,
                           model_name = DEFAULT_FEATURE_MODEL,
                           n_matches = N_MATCHES_PLOT, threshold = LOWE_THRS):
         """
