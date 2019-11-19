@@ -24,14 +24,14 @@
 ###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
-### 13/11/2019 - Oscar: image class - defined all basic attributes and methods.
-### 14/11/2019 - Oscar: image class - added the plot methods.
-### 15/11/2019 - Oscar: image comparator class - defined all basic attributes and methods.
-### 17/11/2019 - Oscar: image comparator class - match method added.
-### 18/11/2019 - Oscar: image class - added sift as default feature detection model.
-### 18/11/2019 - Oscar: image comparator class - match method updated with model selection.
-### 19/11/2019 - Oscar: image comparator class - match method updated with knn methods.
-### 19/11/2019 - Oscar: image comparator class - added orb algorithm for feature detection.
+### 13/11/2019 - Oscar: Image class - defined all basic attributes and methods.
+### 14/11/2019 - Oscar: Image class - added the plot methods.
+### 15/11/2019 - Oscar: Image comparator class - defined all basic attributes and methods.
+### 17/11/2019 - Oscar: Image comparator class - match method added.
+### 18/11/2019 - Oscar: Image class - added sift as default feature detection model.
+### 18/11/2019 - Oscar: ImageComparator class - match method updated with model selection.
+### 19/11/2019 - Oscar: ImageComparator class - match method updated with knn methods.
+### 19/11/2019 - Oscar: ImageComparator class - added orb algorithm for feature detection.
 ###
 
 ### import Libraries ###
