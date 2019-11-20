@@ -270,18 +270,23 @@ class ImageComparator:
 
         return self
 
-    def score(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL):
+    def score(self, threshold = LOWE_THRS):
         """
-            score of similarity.
+            Lowe score of similarity.
+            Defined for knnmatch only.
 
-            It takes two objects of type Image as input.
-            The model_name argument indicates the model to use to calculate images keypoints.
+            The argument threshold (default 0.7) indicates the limit splitting good/bad matches.
             It returns a float indicating the score of the match.
 
             Theoretically, we make use of the Lowe distance to calculate the score.
         """
 
-        return score
+        if not hasattr(self, 'knnmatches_'):
+            raise NotMatchedError('Call knnmatch before calculating the score.')
+
+        all_matches = self.knnmatches_
+
+        return self.__ratio_test(all_matches, threshold, option = 'Score')
 
     def __matches_to_plot_classic(self, Image_1, Image_2,
                                   model_name = DEFAULT_FEATURE_MODEL,
@@ -399,20 +404,46 @@ class ImageComparator:
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
 
-    def __ratio_test(self, matches, threshold):
+    def __ratio_test(self, matches, threshold, option):
         """
             Private method to calculate the ratio test and in Lowe's paper defining SIFT.
 
             It takes the list of couple of matches as one argument.
             As second argument the threshold value.
+            As third argument the option value indicates whether we want the drawing mask,
+            the good matches list or the score.
+            option addmitted values: ['Mask', 'List', 'Score']
 
-            It returns a list of lists, being the mask for plotting matches.
         """
-        matchesMask = [[0,0] for i in range(len(matches))]
+        if not hasattr(self, 'knnmatches_'):
+            raise NotMatchedError('Call knnmatch before calculating ratio test.')
 
-        # ratio test as per Lowe's paper
-        for i,(m,n) in enumerate(matches):
-            if m.distance < threshold*n.distance:
-                matchesMask[i]=[1,0]
+        if option == 'Mask':
+            matchesMask = [[0,0] for i in range(len(matches))]
 
-        return matchesMask
+            # ratio test as per Lowe's paper
+            for i,(m,n) in enumerate(matches):
+                if m.distance < threshold*n.distance:
+                    matchesMask[i]=[1,0]
+
+            return matchesMask
+
+        elif option == 'List':
+            good_matches = []
+
+            # ratio test as per Lowe's paper
+            for (m,n) in matches:
+                if m.distance < threshold*n.distance:
+                    good_matches.append(m)
+
+            return good_matches
+
+        elif option == 'Score':
+            score = 0
+
+            # ratio test as per Lowe's paper
+            for (m,n) in matches:
+                if m.distance < threshold*n.distance:
+                    score +=1
+
+            return score
