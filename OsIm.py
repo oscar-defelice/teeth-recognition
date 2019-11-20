@@ -33,6 +33,7 @@
 ### 19/11/2019 - Oscar: ImageComparator class - match method updated with knn methods.
 ### 19/11/2019 - Oscar: ImageComparator class - added orb algorithm for feature detection.
 ### 19/11/2019 - Oscar: ImageComparator class - Lowe score method added.
+### 20/11/2019 - Oscar: ImageComparator class - match and knnmatch methods modified.
 ###
 
 ### import Libraries ###
@@ -192,7 +193,7 @@ class ImageComparator:
 
         Attributes
         ----------
-        matcher :   object,
+        matcher_ :  object,
                     which model has been used to calculate keypoints.
 
 
@@ -238,13 +239,16 @@ class ImageComparator:
 
             It takes two objects of type Image as input.
             The model_name argument indicates the model to use to calculate images keypoints.
-            It returns a list of match objects.
+            It returns self object updated with a list of matches as attribute.
         """
         matches = self.match_model_.match(Image_1.keypoints(model_name)[1],
                                           Image_2.keypoints(model_name)[1])
         matches = sorted(matches, key = lambda x:x.distance)
-        return matches
-        
+
+        self.matches_ = matches
+
+        return self
+
     def knnmatch(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL, k=2):
         """
             match method.
@@ -252,18 +256,20 @@ class ImageComparator:
             It takes two objects of type Image as input.
             The model_name argument indicates the model to use to calculate images keypoints.
             k (default 2) argument is an int and indicates the number of classes to collect the matches.
-            It returns a list of couples of match objects.
+            It returns the self object updated with the list of knnmatches as attribute.
         """
         # change crossCheck argument of bf matcher for knn method.
         if self.matcher_ == 'bf':
             self.match_model_ = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
-            
+
         matches = self.match_model_.knnMatch(Image_1.keypoints(model_name)[1],
                                           Image_2.keypoints(model_name)[1], k=2)
         matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
-        
-        return matches
-    
+
+        self.knnmatches_ = matches
+
+        return self
+
     def score(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL):
         """
             score of similarity.
@@ -274,9 +280,9 @@ class ImageComparator:
 
             Theoretically, we make use of the Lowe distance to calculate the score.
         """
-        
+
         return score
-        
+
     def __matches_to_plot_classic(self, Image_1, Image_2,
                                   model_name = DEFAULT_FEATURE_MODEL,
                                   n_matches = N_MATCHES_PLOT):
@@ -296,12 +302,12 @@ class ImageComparator:
             try:
                 if (n_matches < 0):
                     raise ValueError('n_matches can only be an integer or a positive float')
-                
+
                 good_matches = [match for match in all_matches if match.distance >= n_matches]
                 return good_matches
             except:
                 raise ValueError('%s is not an integer nor a float' %n_matches)
-                
+
     def __matches_to_plot_knn(self, Image_1, Image_2,
                               model_name = DEFAULT_FEATURE_MODEL,
                               threshold = LOWE_THRS):
@@ -312,11 +318,11 @@ class ImageComparator:
             It takes two optional arguments.
             The model_name argument indicates the model to use to calculate images keypoints.
             threshold argument correspond to the
-            
+
             returns a dictionary of drawing parameters.
         """
         all_matches = self.knnmatch(Image_1, Image_2, model_name, k = 2)
-           
+
         self.__ratio_test(all_matches, threshold)
 
         draw_params = dict(matchColor = (0,255,0),
@@ -324,7 +330,7 @@ class ImageComparator:
                            matchesMask = matchesMask,
                            flags = cv2.DrawMatchesFlags_DEFAULT)
         return draw_params
-                
+
     def __matches_to_plot(self, Image_1, Image_2, knnmatch = True,
                           model_name = DEFAULT_FEATURE_MODEL,
                           n_matches = N_MATCHES_PLOT, threshold = LOWE_THRS):
@@ -346,7 +352,7 @@ class ImageComparator:
             return self.__matches_to_plot_classic(Image_1, Image_2,
                                                   model_name = DEFAULT_FEATURE_MODEL,
                                                   n_matches = n_matches)
-            
+
 
     def plot_matching(self, Image_1, Image_2,
                       keypoints_1 = None, keypoints_2 = None,
@@ -363,7 +369,7 @@ class ImageComparator:
             n_matches can be a positive float and the function will show all the matches
             whose score is greater than the n_matches.
         """
-        
+
         try:
             img_to_plot = cv2.drawMatches(Image_1.img_, keypoints_1,
                                           Image_2.img_, keypoints_2,
@@ -389,24 +395,24 @@ class ImageComparator:
                                                      Image_2.img_, Image_2.keypoints(model_name)[0],
                                                      self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
                                                      None, **draw_params)
-        
+
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
-    
+
     def __ratio_test(self, matches, threshold):
         """
             Private method to calculate the ratio test and in Lowe's paper defining SIFT.
-            
+
             It takes the list of couple of matches as one argument.
             As second argument the threshold value.
-            
+
             It returns a list of lists, being the mask for plotting matches.
         """
         matchesMask = [[0,0] for i in range(len(matches))]
-        
+
         # ratio test as per Lowe's paper
         for i,(m,n) in enumerate(matches):
             if m.distance < threshold*n.distance:
                 matchesMask[i]=[1,0]
-                
+
         return matchesMask
