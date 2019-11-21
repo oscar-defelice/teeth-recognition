@@ -48,14 +48,15 @@ import matplotlib.pyplot as plt
 
 ### constants definition ###
 LOWE_THRS = 0.7
-DEFAULT_FIGSIZE = (10,15) # Default size for image plots.
+DEFAULT_FIGSIZE = (10,15) # Default size for  vertical image plots.
+DEFAULT_FIGSIZE_HOR = (16,10) # Default size for horizontal image plots.
 DEFAULT_FEATURE_MODEL = 'sift'
-FLANN_INDEX_KDTREE = 1
-N_FLANN_TREES = 5
+FLANN_INDEX_KDTREE = 1 # Flann index parameter
+N_FLANN_TREES = 5 # Number of trees in Flann matchers
 N_FLANN_CHECKS = 50
 EDGE_THRS = 20 # SIFT edgeThreshold parameter
 N_MATCHES_PLOT = 15
-DEFAULT_N_FEATURES = 15000 # Default number of features for ORB algorithm)
+DEFAULT_N_FEATURES = 15000 # Default number of features for ORB algorithm
 
 ### models definitions ###
 sift = cv2.xfeatures2d.SIFT_create(edgeThreshold = EDGE_THRS)
@@ -192,7 +193,7 @@ class Image:
             raise NotFittedError('Run find_keypoints before plotting')
 
         img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints_, self.img_)
-        plt.figure(figsize=DEFAULT_FIGSIZE)
+        plt.figure(figsize= figsize)
         plt.imshow(img_to_plot)
 
     def plotImage(self, figsize = DEFAULT_FIGSIZE):
@@ -201,7 +202,7 @@ class Image:
 
             figsize is a tuple tuning the plot size.
         """
-        plt.figure(figsize=DEFAULT_FIGSIZE)
+        plt.figure(figsize= figsize)
         plt.imshow(self.img_), plt.show()
 
 ### Image comparator class ###
@@ -447,7 +448,7 @@ class ImageComparator:
             raise NotMatchedError('Run a match method before plotting.')
 
 
-    def plot_matching(self, Image_1, Image_2, figsize = DEFAULT_FIGSIZE,
+    def plot_matching(self, Image_1, Image_2, figsize = DEFAULT_FIGSIZE_HOR,
                       n_matches = N_MATCHES_PLOT,
                       threshold = LOWE_THRS):
         """
