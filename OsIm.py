@@ -26,8 +26,8 @@
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
 ### 13/11/2019 - Oscar: Image class - defined all basic attributes and methods.
 ### 14/11/2019 - Oscar: Image class - added the plot methods.
-### 15/11/2019 - Oscar: Image comparator class - defined all basic attributes and methods.
-### 17/11/2019 - Oscar: Image comparator class - match method added.
+### 15/11/2019 - Oscar: ImageComparator class - defined all basic attributes and methods.
+### 17/11/2019 - Oscar: ImageComparator class - match method added.
 ### 18/11/2019 - Oscar: Image class - added sift as default feature detection model.
 ### 18/11/2019 - Oscar: ImageComparator class - match method updated with model selection.
 ### 19/11/2019 - Oscar: ImageComparator class - match method updated with knn methods.
