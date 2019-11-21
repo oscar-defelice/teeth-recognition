@@ -33,9 +33,10 @@
 ### 19/11/2019 - Oscar: ImageComparator class - match method updated with knn methods.
 ### 19/11/2019 - Oscar: ImageComparator class - added orb algorithm for feature detection.
 ### 19/11/2019 - Oscar: ImageComparator class - Lowe score method added.
-### 20/11/2019 - Oscar: ImageComparator class - match and knnmatch methods modified.
+### 20/11/2019 - Oscar: ImageComparator class - match method modified.
 ### 20/11/2019 - Oscar: ImageComparator class - __ratio_test method modified.
 ### 20/11/2019 - Oscar: Error classes - custom exceptions added.
+### 21/11/2019 - Oscar: ImageComparator class - knnmatch method modified.
 ###
 
 ### import Libraries ###
@@ -274,9 +275,6 @@ class ImageComparator:
                                               Image_2.descriptors_)
             matches = sorted(matches, key = lambda x:x.distance)
 
-            self.matches_ = matches
-
-            return self
         else:
             Image_1.find_keypoints(model_name)
             Image_2.find_keypoints(model_name)
@@ -285,9 +283,10 @@ class ImageComparator:
                                               Image_2.descriptors_)
             matches = sorted(matches, key = lambda x:x.distance)
 
-            self.matches_ = matches
 
-            return self
+        self.matches_ = matches
+
+        return self
 
     def knnmatch(self, Image_1, Image_2, model_name = DEFAULT_FEATURE_MODEL, k=2):
         """
@@ -302,9 +301,18 @@ class ImageComparator:
         if self.matcher_ == 'bf':
             self.match_model_ = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
 
-        matches = self.match_model_.knnMatch(Image_1.keypoints(model_name)[1],
-                                          Image_2.keypoints(model_name)[1], k=2)
-        matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
+        if hasattr(Image_1, 'keypoints_') and hasattr(Image_2, 'keypoints_'):
+            matches = self.match_model_.knnMatch(Image_1.descriptors_,
+                                                 Image_2.descriptors_, k)
+            matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
+
+        else:
+            Image_1.find_keypoints(model_name)
+            Image_2.find_keypoints(model_name)
+
+            matches = self.match_model_.knnMatch(Image_1.keypoints(model_name)[1],
+                                                 Image_2.keypoints(model_name)[1], k)
+            matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
 
         self.knnmatches_ = matches
 
@@ -327,6 +335,50 @@ class ImageComparator:
         all_matches = self.knnmatches_
 
         return self.__ratio_test(all_matches, threshold, option = 'Score')
+
+    def __ratio_test(self, matches, threshold, option):
+        """
+            Private method to calculate the ratio test and in Lowe's paper defining SIFT.
+
+            It takes the list of couple of matches as one argument.
+            As second argument the threshold value.
+            As third argument the option value indicates whether we want the drawing mask,
+            the good matches list or the score.
+            option addmitted values: ['Mask', 'List', 'Score']
+
+        """
+        if not hasattr(self, 'knnmatches_'):
+            raise NotMatchedError('Call knnmatch before calculating ratio test.')
+
+        if option == 'Mask':
+            matchesMask = [[0,0] for i in range(len(matches))]
+
+            # ratio test as per Lowe's paper
+            for i,(m,n) in enumerate(matches):
+                if m.distance < threshold*n.distance:
+                    matchesMask[i]=[1,0]
+
+            return matchesMask
+
+        elif option == 'List':
+            good_matches = []
+
+            # ratio test as per Lowe's paper
+            for (m,n) in matches:
+                if m.distance < threshold*n.distance:
+                    good_matches.append(m)
+
+            return good_matches
+
+        elif option == 'Score':
+            score = 0
+
+            # ratio test as per Lowe's paper
+            for (m,n) in matches:
+                if m.distance < threshold*n.distance:
+                    score +=1
+
+            return score
 
     def __matches_to_plot_classic(self, n_matches):
         """
@@ -444,47 +496,3 @@ class ImageComparator:
 
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
-
-    def __ratio_test(self, matches, threshold, option):
-        """
-            Private method to calculate the ratio test and in Lowe's paper defining SIFT.
-
-            It takes the list of couple of matches as one argument.
-            As second argument the threshold value.
-            As third argument the option value indicates whether we want the drawing mask,
-            the good matches list or the score.
-            option addmitted values: ['Mask', 'List', 'Score']
-
-        """
-        if not hasattr(self, 'knnmatches_'):
-            raise NotMatchedError('Call knnmatch before calculating ratio test.')
-
-        if option == 'Mask':
-            matchesMask = [[0,0] for i in range(len(matches))]
-
-            # ratio test as per Lowe's paper
-            for i,(m,n) in enumerate(matches):
-                if m.distance < threshold*n.distance:
-                    matchesMask[i]=[1,0]
-
-            return matchesMask
-
-        elif option == 'List':
-            good_matches = []
-
-            # ratio test as per Lowe's paper
-            for (m,n) in matches:
-                if m.distance < threshold*n.distance:
-                    good_matches.append(m)
-
-            return good_matches
-
-        elif option == 'Score':
-            score = 0
-
-            # ratio test as per Lowe's paper
-            for (m,n) in matches:
-                if m.distance < threshold*n.distance:
-                    score +=1
-
-            return score
