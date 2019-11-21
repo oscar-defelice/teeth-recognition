@@ -310,13 +310,8 @@ class ImageComparator:
             Image_1.find_keypoints(model_name)
             Image_2.find_keypoints(model_name)
 
-<<<<<<< HEAD
             matches = self.match_model_.knnMatch(Image_1.descriptors_,
                                                  Image_2.descriptors_, k)
-=======
-            matches = self.match_model_.knnMatch(Image_1.keypoints(model_name)[1],
-                                                 Image_2.keypoints(model_name)[1], k)
->>>>>>> ef1bfa774f8eff878a4d8f91908591de8eded2d5
             matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
 
         self.knnmatches_ = matches
