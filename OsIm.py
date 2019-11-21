@@ -64,7 +64,7 @@ orb = cv2.ORB_create(nfeatures = DEFAULT_N_FEATURES)
 class Error(Exception):
     """Base class for other exceptions"""
     pass
-    
+
 class NotFittedError(Error):
     """Raised when the Image has not fitted the keypoints"""
     pass
@@ -73,7 +73,7 @@ class NotMatchedError(Error):
     """Raised when the ImageComparator has not runned the match"""
     pass
 
-
+### Image class ###
 
 class Image:
     """
@@ -105,10 +105,10 @@ class Image:
 
         img_  : obj
                 Image object.
-                
+
         keypoints_  : list
                       keypoints objects
-                      
+
         descriptors_    : list
                           descriptors objects
 
@@ -172,10 +172,10 @@ class Image:
         """
         model = self.__model_selection(model_name)
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
-        
+
         self.keypoints_ = keypoints
         self.descriptors_ = descriptors
-        
+
         return self
 
 
@@ -187,7 +187,7 @@ class Image:
         """
         if not hasattr(self, 'keypoints_'):
             raise NotFittedError('Run find_keypoints before plotting')
-            
+
         img_to_plot = cv2.drawKeypoints(self.__toGray(), self.keypoints_, self.img_)
         plt.figure(figsize=DEFAULT_FIGSIZE)
         plt.imshow(img_to_plot)
@@ -201,7 +201,7 @@ class Image:
         plt.figure(figsize=DEFAULT_FIGSIZE)
         plt.imshow(self.img_), plt.show()
 
-
+### Image comparator class ###
 
 class ImageComparator:
     """
@@ -280,7 +280,7 @@ class ImageComparator:
         else:
             Image_1.find_keypoints(model_name)
             Image_2.find_keypoints(model_name)
-            
+
             matches = self.match_model_.match(Image_1.descriptors_,
                                               Image_2.descriptors_)
             matches = sorted(matches, key = lambda x:x.distance)
@@ -354,18 +354,18 @@ class ImageComparator:
     def __matches_to_plot_knn(self, n_matches):
         """
             Private method to choose how many matches to plot in case of knnmatch method.
-            
+
             An int n_matches will give the number of matches.
             A float between 0 qnd 1 will give all the matches whose score is greater than the argument.
 
             returns a dictionary of drawing parameters.
         """
-        
+
         if n_matches < 0:
             raise ValueError('n_matches cannot be negative.')
         elif n_matches < 1:
             all_matches = self.knnmatches_
-            
+
             matchesMask = self.__ratio_test(all_matches, threshold = n_matches, option = 'Mask')
 
             draw_params = dict(matchColor = (0,255,0),
@@ -375,7 +375,7 @@ class ImageComparator:
             return draw_params
         else:
             all_matches = self.knnmatches_
-            
+
             matchesMask = self.__ratio_test(all_matches, threshold = LOWE_THRS, option = 'Mask')
             good_matches = self.__ratio_test(all_matches, threshold = LOWE_THRS, option = 'List')
             n = len(good_matches)
@@ -385,13 +385,13 @@ class ImageComparator:
                                matchesMask = matchesMask[:n],
                                flags = cv2.DrawMatchesFlags_DEFAULT)
             return draw_params
-            
+
     def __matches_to_plot(self, n_matches = N_MATCHES_PLOT):
         """
             Private method to choose how many matches to plot.
 
             It takes one optional argument.
-            
+
             An int n_matches will give the number of matches.
             A float between 0 qnd 1 will give all the matches whose score is greater than the argument.
         """
