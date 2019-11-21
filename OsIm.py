@@ -276,12 +276,7 @@ class ImageComparator:
             matches = sorted(matches, key = lambda x: x.distance)
 
         else:
-            Image_1.find_keypoints(model_name)
-            Image_2.find_keypoints(model_name)
-
-            matches = self.match_model_.match(Image_1.descriptors_,
-                                              Image_2.descriptors_)
-            matches = sorted(matches, key = lambda x: x.distance)
+            raise NotFittedError('Run find_keypoints before matching')
 
 
         self.matches_ = matches
@@ -307,12 +302,7 @@ class ImageComparator:
             matches = sorted(matches, key = lambda x: x[0].distance)
 
         else:
-            Image_1.find_keypoints(model_name)
-            Image_2.find_keypoints(model_name)
-
-            matches = self.match_model_.knnMatch(Image_1.descriptors_,
-                                                 Image_2.descriptors_, k)
-            matches = sorted(matches, key = lambda x: x[0].distance)
+            raise NotFittedError('Run find_keypoints before matching')
 
         self.knnmatches_ = matches
 
