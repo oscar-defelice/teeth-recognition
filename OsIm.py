@@ -273,7 +273,7 @@ class ImageComparator:
         if hasattr(Image_1, 'keypoints_') and hasattr(Image_2, 'keypoints_'):
             matches = self.match_model_.match(Image_1.descriptors_,
                                               Image_2.descriptors_)
-            matches = sorted(matches, key = lambda x:x.distance)
+            matches = sorted(matches, key = lambda x: x.distance)
 
         else:
             Image_1.find_keypoints(model_name)
@@ -281,7 +281,7 @@ class ImageComparator:
 
             matches = self.match_model_.match(Image_1.descriptors_,
                                               Image_2.descriptors_)
-            matches = sorted(matches, key = lambda x:x.distance)
+            matches = sorted(matches, key = lambda x: x.distance)
 
 
         self.matches_ = matches
@@ -304,7 +304,7 @@ class ImageComparator:
         if hasattr(Image_1, 'keypoints_') and hasattr(Image_2, 'keypoints_'):
             matches = self.match_model_.knnMatch(Image_1.descriptors_,
                                                  Image_2.descriptors_, k)
-            matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
+            matches = sorted(matches, key = lambda x: x[0].distance)
 
         else:
             Image_1.find_keypoints(model_name)
@@ -312,7 +312,7 @@ class ImageComparator:
 
             matches = self.match_model_.knnMatch(Image_1.descriptors_,
                                                  Image_2.descriptors_, k)
-            matches = sorted(matches, key = lambda x:(x[0].distance/x[1].distance))
+            matches = sorted(matches, key = lambda x: x[0].distance)
 
         self.knnmatches_ = matches
 
