@@ -37,6 +37,7 @@
 ### 20/11/2019 - Oscar: ImageComparator class - __ratio_test method modified.
 ### 20/11/2019 - Oscar: Error classes - custom exceptions added.
 ### 21/11/2019 - Oscar: ImageComparator class - knnmatch method modified.
+### 21/11/2019 - Oscar: ImageComparator class - Plot methods rewritten.
 ###
 
 ### import Libraries ###
@@ -145,6 +146,7 @@ class Image:
             Private method to define which feature detecting algorithm to use.
 
             model_name is a string the name of the model.
+            Admitted values for model_name are ['sift', 'surf', 'orb'].
             It returns the model object.
         """
         if model_name == 'sift':
@@ -445,7 +447,7 @@ class ImageComparator:
             raise NotMatchedError('Run a match method before plotting.')
 
 
-    def plot_matching(self, figsize = DEFAULT_FIGSIZE,
+    def plot_matching(self, Image_1, Image_2, figsize = DEFAULT_FIGSIZE,
                       n_matches = N_MATCHES_PLOT,
                       threshold = LOWE_THRS):
         """
@@ -457,32 +459,23 @@ class ImageComparator:
             n_matches can be a positive float and the function will show all the matches
             whose score is greater than the n_matches.
         """
-
-        try:
-            img_to_plot = cv2.drawMatches(Image_1.img_, keypoints_1,
-                                          Image_2.img_, keypoints_2,
-                                          self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
-                                          Image_2.img_, flags=2)
-        except:
+        if hasattr(self, 'matches_'):
             try:
-                img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints(model_name)[0],
-                                              Image_2.img_, Image_2.keypoints(model_name)[0],
-                                              self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
+                img_to_plot = cv2.drawMatches(Image_1.img_, Image_1.keypoints_,
+                                              Image_2.img_, Image_2.keypoints_,
+                                              self.__matches_to_plot(n_matches),
                                               Image_2.img_, flags=2)
-            except:
-                draw_params = self.__matches_to_plot_knn(Image_1, Image_2,
-                                                         model_name,
-                                                         threshold)
+            except AttributeError:
+                raise NotFittedError('Run find_keypoints before matching')
+        elif hasattr(self, 'knnmatches_'):
+                draw_params = self.__matches_to_plot_knn(threshold)
                 try:
-                    img_to_plot = cv2.drawMatchesKnn(Image_1.img_, keypoints_1,
-                                                     Image_2.img_, keypoints_2,
-                                                     self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
+                    img_to_plot = cv2.drawMatchesKnn(Image_1.img_, Image_1.keypoints_,
+                                                     Image_2.img_, Image_2.keypoints_,
+                                                     self.knnmatches_,
                                                      None, **draw_params)
-                except:
-                    img_to_plot = cv2.drawMatchesKnn(Image_1.img_, Image_1.keypoints(model_name)[0],
-                                                     Image_2.img_, Image_2.keypoints(model_name)[0],
-                                                     self.__matches_to_plot(Image_1, Image_2, model_name, n_matches, threshold),
-                                                     None, **draw_params)
+                except AttributeError:
+                    raise NotFittedError('Run find_keypoints before matching')
 
         plt.figure(figsize=figsize)
         plt.imshow(img_to_plot), plt.show()
