@@ -259,7 +259,7 @@ class ImageComparator:
             matcher = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         elif match_model == 'flann': # feature matching method - Flann method
             index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = N_FLANN_TREES)
-            search_params = dict(checks = N_FLANN_CHECKS)   # or pass empty dictionary
+            search_params = dict(checks = N_FLANN_CHECKS) # or pass empty dictionary
 
             matcher = cv2.FlannBasedMatcher(index_params, search_params)
 
