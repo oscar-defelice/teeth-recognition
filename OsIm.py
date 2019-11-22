@@ -149,18 +149,18 @@ class Image:
 
             model_name is a string the name of the model.
             Admitted values for model_name are ['sift', 'surf', 'orb'].
-            It returns the model object.
+            It returns the self object.
         """
         if model_name == 'sift':
-            model = sift
+            self.model_ = sift
         elif model_name == 'surf':
-            model = surf
+            self.model_ = surf
         elif model_name == 'orb':
-            model = orb
+            self.model_ = orb
         else:
             raise ValueError('The only implemented models are sift, surf and orb.')
 
-        return model
+        return self
 
 
     def find_keypoints(self, model_name = DEFAULT_FEATURE_MODEL):
@@ -175,7 +175,8 @@ class Image:
             keypoints is a list of keypoint objects.
             descriptors is a list of arrays encoding the features vector.
         """
-        model = self.__model_selection(model_name)
+        self.__model_selection(model_name)
+        model = self.model_
         keypoints, descriptors = model.detectAndCompute(self.img_, None)
 
         self.keypoints_ = keypoints
@@ -274,6 +275,9 @@ class ImageComparator:
             The model_name argument indicates the model to use to calculate images keypoints.
             It returns self object updated with a list of matches as attribute.
         """
+        # Change the norm for orb distances
+        if Image_1.model_ == orb and self.matcher_ == 'bf':
+            self.match_model_ = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         if hasattr(Image_1, 'keypoints_') and hasattr(Image_2, 'keypoints_'):
             matches = self.match_model_.match(Image_1.descriptors_,
                                               Image_2.descriptors_)
