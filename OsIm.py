@@ -275,7 +275,7 @@ class ImageComparator:
             The model_name argument indicates the model to use to calculate images keypoints.
             It returns self object updated with a list of matches as attribute.
         """
-        # Change the norm for orb distances
+        # Change the norm for orb model
         if Image_1.model_ == orb and self.matcher_ == 'bf':
             self.match_model_ = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
         if hasattr(Image_1, 'keypoints_') and hasattr(Image_2, 'keypoints_'):
