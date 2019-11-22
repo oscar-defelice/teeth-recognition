@@ -24,7 +24,7 @@
 ###
 ### 08/11/2019 - Oscar: creation of repository and first commit.
 ### 10/11/2019 - Oscar: creation of modules and first version of the script.
-### 14/11/2019 - Oscar: Istanciate images - script version 1.1.
+### 14/11/2019 - Oscar: Instantiate images - script version 1.1.
 ### 21/11/2019 - Oscar: Including the comparator - script version 2.0.
 ###
 
