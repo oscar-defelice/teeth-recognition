@@ -60,7 +60,7 @@ img_test.plotKeypoints(model_name = model)
 comparator = OsIm.ImageComparator(matcher = model_compare)
 
 ### Compute the matches
-comparator.knnmatch(img, test_img, model_name = model)
+comparator.knnmatch(img_zero, img_test, model_name = model)
 
 print('The similarity score of the two images is %.1f' %comparator.score())
 
