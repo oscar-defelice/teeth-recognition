@@ -64,5 +64,8 @@ comparator.knnmatch(img_zero, img_test, model_name = model)
 
 print('The similarity score of the two images is %.1f' %comparator.score())
 
+### Plot the two images with matches
+comparator.plot_matching(img_zero, img_test)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
