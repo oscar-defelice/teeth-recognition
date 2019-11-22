@@ -38,6 +38,7 @@
 ### 20/11/2019 - Oscar: Error classes - custom exceptions added.
 ### 21/11/2019 - Oscar: ImageComparator class - knnmatch method modified.
 ### 21/11/2019 - Oscar: ImageComparator class - Plot methods rewritten.
+### 22/11/2019 - Oscar: ImageComparator class - Score method modified.
 ###
 
 ### import Libraries ###
