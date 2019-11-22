@@ -327,7 +327,9 @@ class ImageComparator:
 
         all_matches = self.knnmatches_
 
-        return self.__ratio_test(all_matches, threshold, option = 'Score')
+        good_matches = self.__ratio_test(all_matches, threshold, option = 'List')
+
+        return len(good_matches)
 
     def __ratio_test(self, matches, threshold, option):
         """
@@ -335,9 +337,9 @@ class ImageComparator:
 
             It takes the list of couple of matches as one argument.
             As second argument the threshold value.
-            As third argument the option value indicates whether we want the drawing mask,
-            the good matches list or the score.
-            option addmitted values: ['Mask', 'List', 'Score']
+            As third argument the option value indicates whether we want the drawing mask or
+            the good matches list.
+            option addmitted values: ['Mask', 'List']
 
         """
         if not hasattr(self, 'knnmatches_'):
@@ -362,16 +364,6 @@ class ImageComparator:
                     good_matches.append(m)
 
             return good_matches
-
-        elif option == 'Score':
-            score = 0
-
-            # ratio test as per Lowe's paper
-            for (m,n) in matches:
-                if m.distance < threshold*n.distance:
-                    score +=1
-
-            return score
 
     def __matches_to_plot_classic(self, n_matches):
         """
