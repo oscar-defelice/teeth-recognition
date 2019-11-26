@@ -334,7 +334,9 @@ class ImageComparator:
 
         good_matches = self.__ratio_test(all_matches, threshold, option = 'List')
 
-        score = 1. - (len(all_matches)/len(good_matches))
+        eps = 10**-5
+        ratio = len(all_matches)/(len(good_matches)+eps)
+        score = 1 - min(1, ratio)
 
         return score
 
