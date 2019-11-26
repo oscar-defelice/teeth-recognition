@@ -336,7 +336,7 @@ class ImageComparator:
 
         score = 1. - (len(all_matches)/len(good_matches))
 
-        return len(good_matches)
+        return score
 
     def __ratio_test(self, matches, threshold, option):
         """
