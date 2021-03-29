@@ -67,8 +67,7 @@ for image in images.values():
     scores.append(comparator.score())
 
 ### Find the maximum score
-maximum_score = max(scores)
-maximum_index = scores.index(maximum_score)
+maximum_index, maximum_score = max(enumerate(scores), key=lambda x: x[1])
 
 print('We found an image with score %.1f' %maximum_score)
 
